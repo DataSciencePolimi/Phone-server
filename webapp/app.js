@@ -74,6 +74,29 @@ var getCountry = function(countryCode){
     }
     
 }
+
+router.get('/meta',function*(next){
+
+    console.log('Connecting to Mongo');
+    db = yield connect(MONGO_CONFIG);
+
+    const collection = db.collection(OUT_COLLECTION);
+
+    let min = yield collection.find({},{_id:0,date:1}).sort({date: 1}).limit(1).toArray();
+    let max = yield collection.find({},{_id:0,date:1}).sort({date: -1}).limit(1).toArray();
+
+    let response = {
+        min:min[0].date,
+        max:max[0].date
+    };
+
+    this.body = response;
+    yield disconnect();
+
+
+});
+
+
 router.get('/incoming', function* (next) {
     var query = this.query;
 
