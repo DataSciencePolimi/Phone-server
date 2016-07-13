@@ -7,7 +7,7 @@ const MongoClient = require('mongodb').MongoClient;
 const config = require('../config/configuration.json');
 
 console.log('Reading the csv');
-var data = fs.readFileSync('outgoing.csv').toString().split('\n');
+var data = fs.readFileSync('incoming.csv').toString().split('\n');
 
 
 let year = 2016;
@@ -55,7 +55,7 @@ MongoClient
 
   console.log('Inserting data in the db');
 
-  var collection = db.collection('calls');
+  var collection = db.collection('incalls');
 
   console.log(data.length);
   collection

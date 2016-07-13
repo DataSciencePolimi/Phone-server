@@ -6,7 +6,7 @@ const _ = require('lodash');
 const MongoClient = require('mongodb').MongoClient;
 
 const MONGO_CONFIG = require('../config/configuration.json');
-const IN_COLLECTION = 'calls';
+const IN_COLLECTION = 'incalls';
 const OUT_COLLECTION = 'calls';
 
 var app = koa();
