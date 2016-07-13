@@ -5,6 +5,7 @@ const router = require('koa-router')();
 const _ = require('lodash');
 const MongoClient = require('mongodb').MongoClient;
 
+const NILS = require('./milan_nils.json')
 const MONGO_CONFIG = require('../config/configuration.json');
 const IN_COLLECTION = 'incalls';
 const OUT_COLLECTION = 'calls';
@@ -30,6 +31,19 @@ app.use(function* (next) {
     console.log('%s %s - %s', this.method, this.url, ms);
 });
 
+var getNilId = function(place){
+
+    let nil =  _(NILS)
+    .find((o)=> {
+        return o.properties.PLACE === place
+    });
+
+    if(nil){
+        return nil.properties.ID_PLACE;
+    }else{
+        return place;
+    }
+};
 var createMatch = function (place, gender, age, type, period, start, end) {
 
     var match = {};
@@ -137,7 +151,7 @@ router.get('/incoming', function* (next) {
                 .map((v,k)=>{
                     return {
                         calls:v,
-                        id:k
+                        id:getNilId(k)
                     }
                 })
                 .value()
@@ -218,7 +232,7 @@ router.get('/outgoing', function* (next) {
         })
         .map((v, k) => {
             return {
-                'from': k,
+                'from': getNilId(k),
                 'to': v
             }
         })
