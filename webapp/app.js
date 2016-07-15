@@ -1,6 +1,7 @@
 'use strict';
 
 const koa = require('koa');
+const cors = require('koa-cors');
 const router = require('koa-router')();
 const _ = require('lodash');
 const MongoClient = require('mongodb').MongoClient;
@@ -116,6 +117,9 @@ var createMatch = function (details, gender, age, type, period, start, end) {
 
 
 // MIDDLEWARE
+
+// Enabling CORS
+app.use(cors());
 
 // Request log
 app.use(function* (next) {
