@@ -40,8 +40,45 @@ var createMatch = function (details, gender, age, type, period, start, end) {
         }
     };
 
-    (gender && gender.toLowerCase() !== 'b') ? match.gender = gender : '';
-    (age) ? match.age = age : '';
+    if(gender){
+        if(gender.indexOf(',')!==-1){
+            gender = gender.split(',')
+        }
+        if(!_.isArray(gender)){
+            gender = [gender];
+        }
+
+        match.gender = {
+            '$in':[]
+        };
+
+        for (let i = 0; i < gender.length; i++) {
+            let element = gender[i];
+
+            match.gender['$in'].push(element);
+            
+        }
+    }
+
+     if(age){
+        if(age.indexOf(',')!==-1){
+            age = age.split(',')
+        }
+        if(!_.isArray(age)){
+            age = [age];
+        }
+
+        match.age = {
+            '$in':[]
+        };
+
+        for (let i = 0; i < age.length; i++) {
+            let element = age[i];
+
+            match.age['$in'].push(element);
+            
+        }
+    }
 
     if (type) {
         (type === 'b') ? match.type = 'B' : match.type = 'C';
@@ -103,12 +140,17 @@ router.get('/meta', function* (next) {
     let max = yield collection.find({}, { _id: 0, date: 1 }).sort({ date: -1 }).limit(1).toArray();
     let ageList = yield collection.distinct("age");
     let detail = ['nil', 'city'];
+    let period = ['we','wd'];
+    let contract = ['b','c'];
+    let gender = ['M','F'];
 
     let response = {
         min: min[0].date,
         max: max[0].date,
         age: ageList,
-        detail: detail
+        detail: detail,
+        contract:contract,
+        gender:gender
     };
 
     this.body = response;
@@ -129,6 +171,7 @@ router.get('/incoming', function* (next) {
     var end = query.end;
     var detail = query.detail || 'nil';
 
+    
     var match = createMatch(detail, gender, age, type, period, start, end);
 
     let aggregation = {

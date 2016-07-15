@@ -24,6 +24,8 @@ lib-cov
 *.pid
 *.gz
 
+#mongodump
+webapp/tim
 
 # Do not sync dependencies
 node_modules
