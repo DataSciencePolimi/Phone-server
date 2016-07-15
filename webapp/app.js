@@ -101,9 +101,7 @@ var createMatch = function (details, gender, age, type, period, start, end) {
 
     // Retrieve data related to cities in the province
     if (details === 'city') {
-        match.nilId = {
-            '$eq': null
-        }
+        match.nilId = null;
     // Retreive data related to the nils
     } else {
         match.nilId = {
